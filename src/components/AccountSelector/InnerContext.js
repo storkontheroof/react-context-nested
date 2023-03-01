@@ -7,7 +7,7 @@ const initialState = {
   searchTerm: "",
   accounts: [],
   filteredAccounts: [],
-  selectedIds: []
+  selectedIds: [],
 };
 
 const InnerContext = React.createContext();
@@ -17,13 +17,13 @@ const reducer = (state, action) => {
     case "INIT":
       return {
         ...state,
-        isInitialized: true
+        isInitialized: true,
       };
     case "LOAD":
       return {
         ...state,
         accounts: action.payload.accounts,
-        filteredAccounts: action.payload.accounts
+        filteredAccounts: action.payload.accounts,
       };
 
     case "FILTER":
@@ -35,19 +35,19 @@ const reducer = (state, action) => {
             account.name
               .toLowerCase()
               .indexOf(action.payload.searchTerm.toLowerCase()) > -1
-        )
+        ),
       };
 
     case "ADD":
       return {
         ...state,
-        selectedIds: [...state.selectedIds, action.payload.id]
+        selectedIds: [...state.selectedIds, parseInt(action.payload.id)],
       };
 
     case "REMOVE":
       return {
         ...state,
-        selectedIds: state.selectedIds.filter((id) => id !== action.payload.id)
+        selectedIds: state.selectedIds.filter((id) => id !== action.payload.id),
       };
 
     default:
@@ -63,17 +63,36 @@ const InnerContextProvider = ({ children }) => {
    * Update the selectedAccounts in the outer/public context
    */
   useEffect(() => {
+    setSelectedAccounts([1, 5, 6]);
+  }, []);
+
+  useEffect(() => {
+    console.log("--- in useEffect ---");
     if (state.isInitialized) {
-      console.log("--- in useEffect ---");
-      setSelectedAccounts(state.selectedIds);
+      const selectedAccounts = state.accounts.filter((account) =>
+        state.selectedIds.includes(account.id)
+      );
+
+      console.log({
+        selectedIds: state.selectedIds,
+        accounts: state.accounts,
+        selectedAccounts,
+      });
+
+      setSelectedAccounts(selectedAccounts);
     }
 
     dispatch({ type: "INIT" });
-  }, [state.selectedIds, setSelectedAccounts, state.isInitialized]);
+  }, [
+    setSelectedAccounts,
+    state.isInitialized,
+    state.selectedIds,
+    state.accounts,
+  ]);
 
   const store = {
     state,
-    dispatch
+    dispatch,
   };
 
   return (

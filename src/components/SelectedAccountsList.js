@@ -4,7 +4,7 @@ import { Wrapper } from "./Wrapper";
 export const SelectedAccountsList = () => {
   const {
     state: { selectedAccounts },
-    clearSelectedAccounts
+    clearSelectedAccounts,
   } = useAccountContext();
 
   return (
@@ -13,7 +13,7 @@ export const SelectedAccountsList = () => {
         <div>
           <ul>
             {selectedAccounts.map((account) => {
-              return <li>{account}</li>;
+              return <li key={account.id}>{account}</li>;
             })}
           </ul>
 

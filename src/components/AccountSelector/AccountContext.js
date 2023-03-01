@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useMemo, useState } from "react";
 import { Wrapper } from "../Wrapper";
 
 const initialState = {
-  selectedAccounts: []
+  selectedAccounts: [],
 };
 
 const AccountContext = React.createContext();
@@ -14,7 +14,7 @@ const AccountContextProvider = ({ children }) => {
     setState(initialState);
   }, []);
 
-  const setSelectedAccounts = useMemo((selectedAccounts) => {
+  const setSelectedAccounts = useCallback((selectedAccounts) => {
     console.log(">>> setting selected accounts", { selectedAccounts });
     setState({ ...state, selectedAccounts });
   }, []);
@@ -22,7 +22,7 @@ const AccountContextProvider = ({ children }) => {
   const value = {
     state,
     setSelectedAccounts,
-    clearSelectedAccounts
+    clearSelectedAccounts,
   };
 
   return (
